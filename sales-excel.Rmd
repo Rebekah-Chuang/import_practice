@@ -1,6 +1,6 @@
 ---
 title: "Sales"
-author: "Your Name"
+author: "Rebekah Chuang"
 output: html_document
 ---
 
@@ -15,8 +15,11 @@ library(readxl)
 knitr::include_graphics("images/sales-1.png")
 ```
 
-```{r}
-
+```{r left-result}
+sales_left <- read_excel("data-raw/sales.xlsx",
+                         col_names = c("id", "n"))
+sales_left <- sales_left[5:13,]
+sales_left
 ```
 
 -   **Stretch goal:** Manipulate the sales data such such that it looks like the following.
@@ -24,7 +27,17 @@ knitr::include_graphics("images/sales-1.png")
 ```{r echo=FALSE, out.width="25%"}
 knitr::include_graphics("images/sales-2.png")
 ```
+```{r right-result}
+sales_right <- sales_left %>% 
+  mutate(
+    brand = case_when(
+      id %in% c("1234", "8721", "1822") ~ "Brand 1",
+      id %in% c("3333", "2156", "3987", "3216") ~ "Brand 2"),
+    id = as.double(id),
+    n = as.double(n)
+  )
 
-```{r}
-
+sales_right <- sales_right[, c("brand", "id", "n")] %>% 
+  na.omit(sales_right)
+sales_right
 ```
